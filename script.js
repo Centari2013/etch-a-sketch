@@ -1,28 +1,38 @@
 const body = document.querySelector("body");
-const buttonDiv = document.createElement("div");
-const clearButton = document.createElement("button");
 const mainDiv = document.createElement("div");
+const topDiv = document.createElement("div");
+const clearButton = document.createElement("button");
+const gridDiv = document.createElement("div");
+const title = document.createElement("header");
 
-setMainDiv();
+body.style.fontFamily = "Times New Roman";
+title.textContent = "Etch-A-Sketch";
+title.style.fontSize = "40px";
+topDiv.setAttribute("style", "display: grid; grid-template-columns: repeat(2, 1fr);width: 90vh; margin: 0 auto")
+setGridDiv();
 setClearButton();
 
-buttonDiv.appendChild(clearButton);
-body.appendChild(buttonDiv);
+mainDiv.appendChild(title);
+topDiv.appendChild(title);
+topDiv.appendChild(clearButton);
+mainDiv.appendChild(topDiv);
+mainDiv.appendChild(gridDiv);
 body.appendChild(mainDiv);
 
-function setMainDiv() {
-    mainDiv.setAttribute("id", "main-div");
-    mainDiv.setAttribute("style", "display: grid; border: solid black; height: 750px; width: 750px")
-    setGridElements(setGridSize(mainDiv));
+function setGridDiv() {
+    gridDiv.setAttribute("id", "main-div");
+    gridDiv.setAttribute("style", "display: grid; border: solid black; height: 90vh; width: 90vh; margin: 0 auto");
+    setGridElements(setGridSize(gridDiv));
 }
 
 function setClearButton() {
     clearButton.textContent = "Clear Grid";
-    clearButton.setAttribute("style", "border: gray 1px;");
+    clearButton.setAttribute("style", "border: gray 1px; margin: 10px; width: 25vh; height: 5vh; font-size: 25px; justify-self: end");
+    clearButton.style.fontFamily = "Times New Roman";
     clearButton.addEventListener("click", function() {
-        clearGridElements();
+        clearGridElements(); 
         let gridSize = userGridSizeInput();
-        setGridElements(setGridSize(mainDiv, gridSize, gridSize));
+        setGridElements(setGridSize(gridDiv, gridSize, gridSize));
     });
 }
 
@@ -35,33 +45,32 @@ function userGridSizeInput() {
     return userGridSize;
 }
 
-function clearGridElements() {
-    while(mainDiv.firstChild) {
-        mainDiv.removeChild(mainDiv.firstChild);
+function clearGridElements() { //deletes grid
+    while(gridDiv.firstChild) {
+        gridDiv.removeChild(gridDiv.firstChild);
     }
 }
 
-function setGridSize(div = mainDiv, width = 16, height = 16) {
+function setGridSize(div = gridDiv, width = 16, height = 16) {
     div.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
     div.style.gridTemplateRows = `repeat(${height}, 1fr)`;
     return width * height;
 }
 
-function setGridElements(gridSize = 16 * 16) {
+function setGridElements(gridSize = 16 * 16) { //makes new grid
     for (let i = 0; i < gridSize; i++){
         let gridItem = document.createElement("div");
         gridItem.classList.add("grid-item");
-        gridItem.setAttribute("style", "border: solid black 1px; height: auto; width: auto;");
+        gridItem.setAttribute("style", "border-top: dotted black 1px; border-right: dotted black 1px; height: auto; width: auto;");
         gridItem.addEventListener("mouseover", function() {
             changeColor(gridItem, "tomato")
         });
-        mainDiv.appendChild(gridItem);
+        gridDiv.appendChild(gridItem);
     }
 }
 
 function changeColor(item, color = "blue") {
     item.style.backgroundColor = color;
-    console.log("Color is being changed.");
 }
 
 
